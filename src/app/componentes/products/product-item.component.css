@@ -1,0 +1,18 @@
+.thumbnail img{
+    min-width: 10px;
+    max-height: 150px;
+    padding-left: 10px;
+
+}
+.thumbnail {
+    margin-bottom: 30px;
+    background-color:#e3e8e5;
+}
+.price {
+    font-weight: bold;
+    font-size: 16px;
+}
+.caption{
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
