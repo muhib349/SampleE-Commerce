@@ -24,7 +24,8 @@
 				</td>
 				<td data-th="Price">{{item.product.price}}TK</td>
 				<td data-th="Quantity">
-					<input (input)="onChangeQuantity($event.target.value,item)" class="form-control text-center" value="1">
+					<input (input)="onChangeQuantity($event.target.value,item)" class="form-control text-center" [(ngModel)] = "item.quantity">
+					<span style="color:red" *ngIf="item.quantity > item.product.quantity"> Not Available</span>
 				</td>
 				<td data-th="Subtotal" class="text-center">{{item.subtotal}}</td>
 				<td class="actions" data-th="">
@@ -33,12 +34,11 @@
 			</tr>
 		</tbody>
 		<tfoot>
-			
 			<tr>
 				<td></td>
 				<td colspan="2" class="hidden-xs"></td>
 				<td class="hidden-xs text-center"><strong>Total {{getTotal()}}</strong></td>
-				<td><a href="#" class="btn btn-success btn-block">Checkout</a></td>
+				<td><button [disabled] = "disableOrder" (click) = "onCheckout()" class="btn btn-success btn-block">Order Now</button></td>
 			</tr>
 		</tfoot>
 	</table>

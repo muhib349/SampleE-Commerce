@@ -1,3 +1,6 @@
+<div *ngIf = "message.length > 0" class="alert alert-success" role="alert">
+   {{message}}
+  </div>
 <div class="row">
     <div *ngFor="let product of products" class="col-sm-6 col-md-4 col-md-offset-3">
         <div class="thumbnail">
@@ -8,11 +11,11 @@
                 <div class="clearfix">
                     <div class="price pull-left">Price: {{product.price}} BDT</div>
                     <div style="margin-left: 20px;" class="price pull-left">Quantity: {{product.quantity}}</div>
-                    <a (click)= "onAddToCart(product)" class="btn btn-success pull-right" style="margin-right: 10px;"  role="button">Add to Cart</a>
+                    <button (click)= "onAddToCart(product)" [disabled]="product.quantity <= 0" class="btn btn-success pull-right" style="margin-right: 10px;"  role="button">Add to Cart</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<app-cart-item (cartEvent) = "receiveEvent($event)" [cartItems] = "cartList"></app-cart-item>
+<app-cart-item (orderSavedEvent) = "onSuccessfullOrder($event)" (cartEvent) = "receiveEvent($event)" [cartItems] = "cartList" [user] = "ngUser"></app-cart-item>

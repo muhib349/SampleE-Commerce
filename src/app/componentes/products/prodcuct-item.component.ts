@@ -3,7 +3,7 @@ import { ProductItemService } from './product-item.service'
 import { Product } from '../../interfaces/product';
 import { User } from '../../interfaces/User'
 import { Cart } from 'src/app/interfaces/cart';
-import { stringify } from 'querystring';
+
 
 @Component({
   selector: 'app-product-item',
@@ -17,6 +17,7 @@ export class ProductItemComponent implements OnInit {
   products: Product[] = [];
 
   cartList: Cart[] = [];
+  message: String = "";
 
   constructor(private service: ProductItemService) { }
 
@@ -39,5 +40,10 @@ export class ProductItemComponent implements OnInit {
 
   receiveEvent(event: Cart[]){
     this.cartList = event
+  }
+
+  onSuccessfullOrder(message: String){
+    this.message = message;
+    this.ngOnInit();
   }
 }

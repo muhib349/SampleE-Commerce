@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Product } from 'src/app/interfaces/product';
 import { Cart } from 'src/app/interfaces/cart';
+import { CartItemService } from './cart-item.service';
+import { User } from 'src/app/interfaces/user';
+import { ProductItemService } from '../products/product-item.service';
 
 @Component({
   selector: 'app-cart-item',
@@ -11,12 +14,15 @@ export class CartItemComponent implements OnInit {
 
 
   total = 0;
+  disableOrder = false;
 
-  constructor() { }
+  constructor(private serviec: CartItemService) { }
 
   @Input() cartItems: Cart[];
-  @Output() cartEvent = new EventEmitter<Cart[]>();
+  @Input('user') ngUser: User;
 
+  @Output() cartEvent = new EventEmitter<Cart[]>();
+  @Output() orderSavedEvent = new EventEmitter<String>();
 
   ngOnInit(): void {
   }
@@ -31,17 +37,22 @@ export class CartItemComponent implements OnInit {
 
   onChangeQuantity(value, cart: Cart){
 
-
-    if(value > cart.product.quantity){
-      alert("Available product is: " + cart.product.quantity)
-      return
-    }
+  
 
     var index = this.cartItems.indexOf(cart);
     if(index >= 0){
+      cart.quantity = value;
       cart.subtotal = cart.product.price* value
       this.cartItems[index] = cart
     }
+
+    this.disableOrder = false;
+
+    this.cartItems.forEach(element => {
+      if(element.quantity > element.product.quantity){
+        this.disableOrder = true;
+      }
+    });
     
   }
 
@@ -53,6 +64,18 @@ export class CartItemComponent implements OnInit {
     });
   
     return this.total
+  }
+
+  public onCheckout(){
+    this.serviec.addOrder(this.cartItems,this.ngUser).add((err, data) =>{
+      if(err){
+        console.log("error")
+      }else{
+        this.cartItems = [];
+        this.cartEvent.emit(this.cartItems);
+        this.orderSavedEvent.emit("Order Successfully Added!")
+      }
+    });
   }
 
 
